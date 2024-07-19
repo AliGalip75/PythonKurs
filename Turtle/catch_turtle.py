@@ -7,7 +7,7 @@ draw_board = Screen()
 draw_board.title("Catch Turtle")
 draw_board.setup(700, 700)
 draw_board.bgcolor("cyan")
-
+Font = ("Arial",15,"bold")
 # Turtle nesnelerini oluştur
 obj1 = Turtle()
 obj1.penup()
@@ -21,7 +21,7 @@ obj2.shape("blank")
 obj2.penup()
 obj2.goto(-20, 320)
 obj2.pendown()
-obj2.write("Time : ", font=10)
+obj2.write("Time : ", font=Font)
 
 obj3 = Turtle()
 obj3.hideturtle()
@@ -29,7 +29,7 @@ obj3.shape("blank")
 obj3.penup()
 obj3.goto(-20, 280)
 obj3.pendown()
-obj3.write("Score : ", font=10)
+obj3.write("Score : ", font=Font)
 
 obj4 = Turtle()
 obj4.hideturtle()
@@ -55,7 +55,7 @@ def show_score():
     if kontrol != score:
         obj5.clear()
         kontrol = score
-    obj5.write("          " + str(score), font=10)
+    obj5.write("          " + str(score), font=Font)
 
 def click_handler(x, y):
     global score
@@ -64,7 +64,7 @@ def click_handler(x, y):
 
 def show_time():
     obj4.clear()
-    obj4.write("       " + str(time_left), font=10)
+    obj4.write("       " + str(time_left), font=Font)
 
 def move():
     if time_left > 0:
