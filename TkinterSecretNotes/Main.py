@@ -7,15 +7,15 @@ from PIL import ImageTk, Image
 # Başlangıçta paneli ekranın tam ortasında konumlandırmak için
 def center_window(window):
     window.update_idletasks()
-    width = window.winfo_width()
-    height = window.winfo_height()
+    width_window = window.winfo_width()
+    height_window = window.winfo_height()
     screen_width = window.winfo_screenwidth()
     screen_height = window.winfo_screenheight()
-    x = (screen_width - width) // 2
-    y = (screen_height - height) // 2
-    window.geometry(f"{width}x{height}+{x}+{y}")
+    x = (screen_width - width_window) // 2
+    y = (screen_height - height_window) // 2
+    window.geometry(f"{width_window}x{height_window}+{x}+{y}")
 
-#Şifreleme
+ #Sifreleme
 def caesar_encrypt(message, shift=5):
     encrypted_message = ""
     for char in message:
@@ -35,6 +35,15 @@ def caesar_decrypt(encrypted_message, shift=5):
     return caesar_encrypt(encrypted_message, -shift)
 
 def save_and_encrypt():
+    if secret_text.get("1.0", END).strip() == "":
+        messagebox.showerror("Hata", "Şifrelenecek mesajı giriniz")
+        return
+    elif Entry_key.get() == "":
+        messagebox.showerror("Hata", "Şifre belirleyiniz")
+        return
+    elif Entry_title.get().strip() == "":
+        messagebox.showerror("Hata", "Başlık giriniz")
+        return
     f1 = open("secrets.txt", "a")
     title = Entry_title.get().strip()
     f1.write(title + "\n")
@@ -47,13 +56,14 @@ def save_and_encrypt():
 
 def select_indices(arr):
     selected_elements = []
-    index = 1  # Başlangıç indeksi
-    while index < len(arr):
-        selected_elements.append(arr[index])
-        index += 2  # 2 adım ilerle
+    my_index = 1  # Başlangıç indeksi
+    while my_index < len(arr):
+        selected_elements.append(arr[my_index])
+        my_index += 2  # 2 adım ilerle
     return selected_elements
 
-def read_file(): #şifrelenmiş metinleri tutan listeyi oluştur
+#şifrelenmiş metinleri tutan listeyi oluştur
+def read_file():
     f1 = open("secrets.txt", "r")
     global file_list
     global file_list2
@@ -66,18 +76,18 @@ index = 0
 def get_last_keys(str_list):
     last_words = []
     for s in str_list:
-        words = s.split(" ")  # Elemanı sözcüklere böl
-        last_words.append(words[-1][:-1])  # Son sözcüğü ekle
+        words = s.split(" ")
+        last_words.append(words[-1][:-1])
     return last_words
 
 def get_secret(str_list):
     modified_list = []
     for s in str_list:
-        words = s.split()  # Elemanı sözcüklere böl
-        if len(words) > 1:  # Eğer birden fazla sözcük varsa
-            modified_list.append(' '.join(words[:-1]))  # Son sözcük hariç geri kalanları birleştir
-        elif len(words) == 1:  # Eğer tek bir sözcük varsa
-            modified_list.append('')  # Boş bir string ekle
+        words = s.split()
+        if len(words) > 1:
+            modified_list.append(' '.join(words[:-1]))
+        elif len(words) == 1:
+            modified_list.append('')
     return modified_list
 
 def decrypt():
@@ -86,21 +96,25 @@ def decrypt():
     global last_keys
     global index
     global secrets
-    last_keys = get_last_keys(file_list2) # şifreli şifreler listesi
+    last_keys = get_last_keys(file_list2)
     secrets = get_secret(file_list2)
     for i in range(len(file_list2)):
         if secrets[i] == secret_text.get("1.0", END).strip():
             isFound = True
             index = i
             break
-    if not isFound:
+    if secret_text.get("1.0", END).strip() == "":
+        messagebox.showerror("Hata", "Şifreli mesajı giriniz")
+    elif not isFound:
         messagebox.showerror("Hata", "Böyle bir bilgi yok!")
+    elif isFound and Entry_key.get().strip() == "":
+        messagebox.showerror("Hata", "Şifreyi giriniz")
     elif isFound and (last_keys[index] == Entry_key.get().strip('\n')):
         secret_text.delete(1.0, END)
         secret_text.insert(END, caesar_decrypt(secrets[index]))
     else:
         messagebox.showerror("Hata", "Hatalı şifre")
-
+    isFound = False
 
 gui = Tk()
 gui.title("Secret Notes")
