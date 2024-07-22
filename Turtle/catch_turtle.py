@@ -89,8 +89,10 @@ obj1.hideturtle()
 obj1.onclick(click_handler)
 
 # Oyunu başlat
+tracer(0)
 show_time()
 show_score()
+tracer(1)
 move()
 countdown()
 
